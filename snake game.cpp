@@ -462,7 +462,44 @@ getchar();
         shift(a,b);
      return 0;
      }
+     void save()
+     {
+         snake *t=head;
+         food *f=fhead;
+         poison *p=phead;
+   ofstream filestream("testout.txt");
+   if (filestream.is_open())
+   {
+    while(t!=NULL)
+    {
+    filestream <<t->x<<"$";
+    filestream <<t->y<<"$@";
+     filestream <<t->value<<"!";
+     t=t->next;
+    }
+    filestream<<"f";
+    while(f!=NULL)
+    {
+    filestream <<f->x<<"$";
+    filestream <<f->y<<"$";
+     f=f->next;
+    }
+      filestream<<"p";
+    while(p!=NULL)
+    {
+    filestream <<p->x<<"$";
+    filestream <<p->y<<"$";
+     p=p->next;
+    }
+    filestream<<"E";
 
+    filestream.close();
+
+   }
+  else
+  cout <<"File opening is fail.";
+
+     }
 };
 int main()
 {
@@ -471,7 +508,11 @@ int main()
 system("COLOR FC");
 char t;
 char c,c1;
+cout<<"Want to play the previous game : y/n";
+cin>>t;
 
+if(t=='n')
+{
 l.insertt(6,34,'H');
 l.insertt(7,34,'#');
 l.insertt(8,34,'#');
@@ -479,8 +520,118 @@ l.insertt(9,34,'T');
 l.inserttf(2,4,'f');
 l.inserttp(7,2,'p');
 
+}
+else
+{
+    ifstream input("testout.txt");
+    char data;
+    int flag=0;
+    int x,y;
+    char ch;
+    int a[10]={0};
+    int b[10]={0};
+    int c[10]={0};
+    int a11[2]={0};
+    int b11[2]={0};
+    int c11[2]={0};
+    int check=0,sum1=0;
+    int k=0,i=0,j=0,k1=0,j1=0,j2=0,k2=0;
+    int sum=0;
+    while(!input.eof())
+    {
+    input>>data;
+if(data=='f')
+  flag=1;
+  else if(data=='p')
+  {
+ flag=2;
+  }
+if(flag==0)
+{
+    if(data=='!'){
+        l.insertt(a11[0],a11[1],ch);
+        sum1=0;
+        k2=0;
+        i=0;
+        check=0;
+
+    }else if(data=='@')
+    {
+
+        check=1;
+    }
+    else if(check==1)
+    {
+
+        ch=data;
+     check=0;
+    }
+    else if(data=='$')
+    {
+
+        for(int g=0;g<i;g++)
+        {
+            sum1=sum1*10+a[g];
+        }
+        a11[k2]=sum1;
+        k2++;
+        sum1=0;
+        i=0;
+    }
+    else {
+        a[i]=data-'0';
+        i++;
+    }
+}
+else if(flag==1)
+{
+if(data=='$')
+      {
+          for(int ii=0;ii<j;ii++)
+          {
+               sum=sum*10+b[ii];
+          }
+
+          b11[k]=sum;
+          k++;
+          j=0;
+          sum=0;
+      }else if(data!='f'){
+      b[j]=data-'0';
+      j++;
+      }
 
 
+}
+  else if(flag==2)
+  {
+      if(data=='$')
+      {
+          for(int ii=0;ii<j1;ii++)
+          {
+               sum=sum*10+c[ii];
+          }
+
+          c11[k1]=sum;
+          k1++;
+          j1=0;
+          sum=0;
+      }else if(data!='p' && data!='E'){
+      c[j1]=data-'0';
+
+      j1++;
+      }
+
+
+
+  }
+    }
+    input.close();
+  //  cout<<b11[0]<<" "<<b11[1]<<endl;
+ //    cout<<c11[0]<<" "<<c11[1]<<endl;
+l.inserttf(b11[0],b11[1],'f');
+l.inserttp(c11[0],c11[1],'p');
+}
 l.display();
 int flag=0;
 char d;
@@ -489,9 +640,19 @@ while(flag==0)
     if(kbhit())
     {
         c=getche();
-        if(c=='q')
-       {
-
+    if(c=='q')
+    {
+        cout<<"Quit the game : Press Y to save the game , Press N to quit without saving , Press C to continue?";
+        cin>>d;
+        if(d=='Y')
+        {
+          flag=1;
+          l.save();
+          cout<<endl<<"Game saved !"<<endl<<"END!";
+           break;
+        }
+        else if(d=='N')
+        {
             cout<<endl<<"Come Next Time !"<<endl<<"END!";
             break;
 
@@ -502,7 +663,7 @@ while(flag==0)
             continue;
         }
     }
-
+    }
     if(c!='a' && c!='d' && c!='w' && c!='s')
     {
         c=c1;
