@@ -6,7 +6,8 @@
 #include<stdlib.h>
 #include<conio.h>
 #include <fstream>
-// Snake game in c++ With file handling!
+// Snake game in c++ With file handling!;
+//In my game the snake head is represented by 'H' and tail by 'T' and rest body part by '#';
 using namespace std;
 static char arrayy[15][80];
 static int fnew=0;
